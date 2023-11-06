@@ -1,0 +1,11 @@
+<header>
+    <a href="/">Nbnb</a>
+    <ul> 
+        
+        {% if request.user.is_authenticated %}
+             <li> <a href="{% url 'users:logut' %}"> logout </a> </li>
+        {% else %}
+         <li> <a href="{% url 'users:login' %}"> login </a> </li>
+        {% endif %}
+    </ul>    
+</header>
