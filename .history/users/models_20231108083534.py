@@ -44,7 +44,7 @@ class User(AbstractUser):
         if self.email_verify is False:
             secret = uuid.uuid4().hex[:20]
             self.email_secret = secret
-            html_message =render_to_string("email/verify_email.html",{'secret':secret})
+            html_message =render_to_string("emails/verify_email.html",{'secret':secret})
             send_mail("Verify your Airbnb account",
                 strip_tags(html_message),
                 settings.EMAIL_HOST_USER, 
@@ -52,5 +52,4 @@ class User(AbstractUser):
                 fail_silently=True,
                 html_message= html_message
                 )
-            self.save()
-            return 
+            

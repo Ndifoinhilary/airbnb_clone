@@ -22,12 +22,18 @@ class LoginForm(forms.Form):
 
 class SignUpForm(forms.ModelForm):
     class Meta:
-        model = models.User
         fields = ['first_name','last_name','email']
     password = forms.CharField(widget=forms.PasswordInput, min_length=6)
     password1 = forms.CharField(
         widget=forms.PasswordInput, label='comfim password')
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        try:
+            models.User.objects.get(email=email)
+            raise forms.ValidationError('User with this email already exits')
+        except models.User.DoesNotExist:
+            return email
 
     def clean_password1(self):
         password = self.cleaned_data.get('password')
@@ -38,10 +44,12 @@ class SignUpForm(forms.ModelForm):
             return password
 
     def save(self):
-        user = super().save(commit= False)
+        first_name = self.cleaned_data.get('first_name')
+        last_name = self.cleaned_data.get('last_name')
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
-        user.username = email
-        user.set_password(password)
+
+        user = models.User.objects.create_user(email,email=email, password=password)
+        user.first_name = first_name
+        user.last_name = last_name
         user.save()
-        return user

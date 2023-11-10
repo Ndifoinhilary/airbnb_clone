@@ -38,10 +38,12 @@ class SignUpForm(forms.ModelForm):
             return password
 
     def save(self):
-        user = super().save(commit= False)
+        first_name = self.cleaned_data.get('first_name')
+        last_name = self.cleaned_data.get('last_name')
         email = self.cleaned_data.get('email')
         password = self.cleaned_data.get('password')
-        user.username = email
-        user.set_password(password)
+
+        user = models.User.objects.create_user(email,email=email, password=password)
+        user.first_name = first_name
+        user.last_name = last_name
         user.save()
-        return user

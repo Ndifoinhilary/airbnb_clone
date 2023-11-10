@@ -39,7 +39,7 @@ class User(AbstractUser):
     email_verify = models.BooleanField(default=False)
     email_secret =models.CharField(max_length = 120, default = "",blank =True )
     
-    
+    @property
     def verify_email(self):
         if self.email_verify is False:
             secret = uuid.uuid4().hex[:20]
@@ -53,4 +53,3 @@ class User(AbstractUser):
                 html_message= html_message
                 )
             self.save()
-            return 

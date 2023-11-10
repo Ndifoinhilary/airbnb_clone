@@ -53,4 +53,3 @@ class User(AbstractUser):
                 html_message= html_message
                 )
             self.save()
-            return 
